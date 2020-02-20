@@ -1,0 +1,52 @@
+{
+    "name": "itk-dev/pretix-api-client-php",
+    "description": "PHP client for pretix api",
+    "type": "library",
+    "require": {
+        "php": "^7.2",
+        "ext-json": "*",
+        "doctrine/collections": "^1.6",
+        "guzzlehttp/guzzle": "^6.5"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpunit/phpunit": "^8.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mikkel Ricky",
+            "email": "rimi@aarhus.dk"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ItkDev\\Pretix\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ItkDev\\Pretix\\": "tests/"
+        }
+    },
+    "scripts": {
+        "coding-standards-check/php-cs-fixer": [
+            "php-cs-fixer --config=.php_cs.dist fix --dry-run"
+        ],
+        "coding-standards-check": [
+            "@coding-standards-check/php-cs-fixer"
+        ],
+        "coding-standards-apply/php-cs-fixer": [
+            "php-cs-fixer --config=.php_cs.dist fix"
+        ],
+        "coding-standards-apply": [
+            "@coding-standards-apply/php-cs-fixer"
+        ],
+        "test": [
+            "phpunit"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
