@@ -46,7 +46,8 @@ class AbstractEntity
 
         switch ($type) {
             case 'multi-lingual string':
-                $value = $this->getLocalizedString($value, $arguments[0] ?? null);
+                $value = $this->getLocalizedString($value,
+                    $arguments[0] ?? null);
                 break;
         }
 

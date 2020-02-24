@@ -33,7 +33,8 @@ class Response
 
         $data = self::getResponseData($response);
 
-        return array_key_exists('results', $data) ? new Collection($response) : new Item($response);
+        return array_key_exists('results',
+            $data) ? new Collection($response) : new Item($response);
     }
 
     public function getStatusCode(): int

@@ -8,7 +8,7 @@ composer require itk-dev/pretix-api-client-php
 ## Test
 
 ```sh
-docker-compose up -d --build
+docker-compose up -d
 docker-compose exec phpfpm composer install
 ```
 

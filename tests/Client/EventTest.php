@@ -28,6 +28,8 @@ class EventTest extends AbstractClientTest
 
     public function testCreateEvent()
     {
+        $numberOfEvents = $this->client()->getEvents()->count();
+
         $data = [
             'name' => [
                 'da' => __METHOD__,
@@ -39,13 +41,23 @@ class EventTest extends AbstractClientTest
 
         $events = $this->client()->getEvents();
 
-        $this->assertSame(1, $events->count());
-        $this->assertCount(1, $events);
+        $this->assertSame($numberOfEvents + 1, $events->count());
+    }
 
-        $event = $events[0];
-        $this->assertSame(['da' => __METHOD__], $event->getName());
-        $this->assertSame(__METHOD__, $event->getName('da'));
+    public function testGetEvent()
+    {
+        $data = [
+            'name' => [
+                'da' => __METHOD__,
+            ],
+            'slug' => __FUNCTION__,
+            'date_from' => (new DateTimeImmutable('2020-01-01'))->format(DateTimeImmutable::ATOM),
+        ];
+        $event = $this->client()->createEvent($data);
 
+        // Get the event.
         $event = $this->client()->getEvent($event);
+        $this->assertSame($data['name'], $event->getName());
+        $this->assertSame($data['name']['da'], $event->getName('da'));
     }
 }

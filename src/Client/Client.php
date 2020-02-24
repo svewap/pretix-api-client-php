@@ -21,6 +21,7 @@ use ItkDev\Pretix\Entity\Organizer;
 use ItkDev\Pretix\Entity\Quota;
 use ItkDev\Pretix\Exception\ClientException;
 use ItkDev\Pretix\Exception\InvalidArgumentException;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Pretix client.
@@ -29,6 +30,9 @@ use ItkDev\Pretix\Exception\InvalidArgumentException;
  */
 class Client
 {
+    /** @var array */
+    private $options;
+
     /**
      * The pretix url.
      *
@@ -60,11 +64,19 @@ class Client
      * @param string $organizerSlug The organizer slug
      * @param string $apiToken      The api token
      */
-    public function __construct($url, $organizerSlug, $apiToken)
+    public function __construct(array $options)
     {
-        $this->url = trim($url, '/');
-        $this->organizer = $organizerSlug;
-        $this->apiToken = $apiToken;
+        $resolver = new OptionsResolver();
+        $resolver
+            ->setDefaults([
+                'url' => 'https://pretix.eu',
+            ])
+            ->setRequired(['url', 'organizer', 'api_token']);
+
+        $this->options = $resolver->resolve($options);
+        $this->url = trim($this->options['url'], '/');
+        $this->organizer = $this->options['organizer'];
+        $this->apiToken = $this->options['api_token'];
     }
 
     /**
@@ -98,7 +110,8 @@ class Client
      */
     public function getOrganizer($organizer): Organizer
     {
-        return $this->getEntity(Organizer::class, 'organizers/'.$organizer.'/');
+        return $this->getEntity(Organizer::class,
+            'organizers/'.$organizer.'/');
     }
 
     /**
@@ -108,7 +121,8 @@ class Client
      */
     public function getEvents(): Collection
     {
-        return $this->getCollection(Event::class, 'organizers/'.$this->organizer.'/events/');
+        return $this->getCollection(Event::class,
+            'organizers/'.$this->organizer.'/events/');
     }
 
     /**
@@ -124,7 +138,8 @@ class Client
     {
         $eventSlug = $this->getSlug($event);
 
-        return $this->getEntity(Event::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/');
+        return $this->getEntity(Event::class,
+            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/');
     }
 
     /**
@@ -134,9 +149,10 @@ class Client
      */
     public function createEvent(array $data): Event
     {
-        return $this->postEntity(Event::class, 'organizers/'.$this->organizer.'/events/', [
-            'json' => $data,
-        ]);
+        return $this->postEntity(Event::class,
+            'organizers/'.$this->organizer.'/events/', [
+                'json' => $data,
+            ]);
     }
 
     /**
@@ -210,7 +226,8 @@ class Client
     {
         $eventSlug = $this->getSlug($event);
 
-        return $this->getCollection(Item::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/items/');
+        return $this->getCollection(Item::class,
+            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/items/');
     }
 
     /**
@@ -565,8 +582,11 @@ class Client
      * @return \ItkDev\Pretix\Response The result
      *                                 The result
      */
-    private function request($method, $path, array $options = []): HttpResponse
-    {
+    private function request(
+        $method,
+        $path,
+        array $options = []
+    ): HttpResponse {
         if (null === $this->client) {
             $this->client = new HttpClient([
                 'base_uri' => $this->url,
@@ -591,8 +611,12 @@ class Client
         }
     }
 
-    private function requestEntity(string $class, string $method, string $path, array $options = []): AbstractEntity
-    {
+    private function requestEntity(
+        string $class,
+        string $method,
+        string $path,
+        array $options = []
+    ): AbstractEntity {
         if (!is_subclass_of($class, AbstractEntity::class)) {
             throw new \RuntimeException(sprintf('Class %s must be an %s', $class, AbstractEntity::class));
         }
@@ -601,8 +625,12 @@ class Client
         return $this->loadEntity($class, $response);
     }
 
-    private function requestCollection(string $class, string $method, string $path, array $options = []): Collection
-    {
+    private function requestCollection(
+        string $class,
+        string $method,
+        string $path,
+        array $options = []
+    ): Collection {
         if (!is_subclass_of($class, AbstractEntity::class)) {
             throw new \RuntimeException(sprintf('Class %s must be an %s', $class, AbstractEntity::class));
         }
@@ -611,11 +639,14 @@ class Client
         return $this->loadCollection($class, $response);
     }
 
-    private function loadCollection(string $class, HttpResponse $response): Collection
-    {
+    private function loadCollection(
+        string $class,
+        HttpResponse $response
+    ): Collection {
         $data = json_decode((string) $response->getBody(), true);
 
-        return new ArrayCollection(array_map(static function ($data) use ($class) {
+        return new ArrayCollection(array_map(static function ($data) use ($class
+        ) {
             return new $class($data);
         }, $data['results']));
     }

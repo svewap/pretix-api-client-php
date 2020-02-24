@@ -18,29 +18,25 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractClientTest extends TestCase
 {
-    /** @var string */
-    private $url;
-
-    /** @var string */
-    private $organizer;
-
-    /** @var string */
-    private $apiToken;
+    /** @var array */
+    private $clientOptions;
 
     /** @var \ItkDev\Pretix\Client */
     private $client;
 
     protected function setUp(): void
     {
-        $this->url = getenv('PRETIX_URL');
-        $this->organizer = getenv('PRETIX_ORGANIZER');
-        $this->apiToken = getenv('PRETIX_API_TOKEN');
+        $this->clientOptions = [
+            'url' => getenv('PRETIX_URL'),
+            'organizer' => getenv('PRETIX_ORGANIZER'),
+            'api_token' => getenv('PRETIX_API_TOKEN'),
+        ];
     }
 
     protected function client(): Client
     {
         if (null === $this->client) {
-            $this->client = new Client($this->url, $this->organizer, $this->apiToken);
+            $this->client = new Client($this->clientOptions);
         }
 
         return $this->client;
