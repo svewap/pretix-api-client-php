@@ -6,7 +6,7 @@
         "php": "^7.2",
         "ext-json": "*",
         "doctrine/collections": "^1.6",
-        "guzzlehttp/guzzle": "^6.5",
+        "guzzlehttp/guzzle": "^6.3",
         "symfony/options-resolver": "^5.0"
     },
     "require-dev": {
