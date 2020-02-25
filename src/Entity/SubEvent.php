@@ -12,6 +12,8 @@ namespace ItkDev\Pretix\Entity;
 
 /**
  * @see https://docs.pretix.eu/en/latest/api/resources/subevents.html
+ *
+ * @method Event getEvent()
  */
 class SubEvent extends AbstractEntity
 {

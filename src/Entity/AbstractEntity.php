@@ -14,6 +14,7 @@ use ItkDev\Pretix\Exception\InvalidArgumentException;
 
 /**
  * @method int getId()
+ * @method array toArray()
  */
 class AbstractEntity
 {
@@ -28,6 +29,17 @@ class AbstractEntity
         $this->data = $data;
     }
 
+    /**
+     * Convert entity to array.
+     *
+     * @return array
+     */
+    public function toArray() {
+        return array_map(static function ($value) {
+            return $value instanceof AbstractEntity ? $value->toArray() : $value;
+        }, $this->data);
+    }
+
     public function __call($name, $arguments)
     {
         if (preg_match('/^get(?P<key>.+)$/', $name, $matches)) {
@@ -36,6 +48,16 @@ class AbstractEntity
                 return $this->getValue($key, $arguments);
             }
         }
+
+        if (preg_match('/^(is|has).+$/', $name, $matches)) {
+            $key = preg_replace_callback('/([A-Z])/', static function ($matches) {
+                return '_'.strtolower($matches[1]);
+            }, $matches[0]);
+            if (is_array($this->data) && array_key_exists($key, $this->data)) {
+                return $this->getValue($key, $arguments);
+            }
+        }
+
         throw new \Error(sprintf('Call to undefined method %s::%s()', static::class, $name));
     }
 

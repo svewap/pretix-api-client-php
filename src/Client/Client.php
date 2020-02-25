@@ -19,6 +19,9 @@ use ItkDev\Pretix\Entity\Event;
 use ItkDev\Pretix\Entity\Item;
 use ItkDev\Pretix\Entity\Organizer;
 use ItkDev\Pretix\Entity\Quota;
+use ItkDev\Pretix\Entity\QuotaAvailability;
+use ItkDev\Pretix\Entity\SubEvent;
+use ItkDev\Pretix\Entity\Webhook;
 use ItkDev\Pretix\Exception\ClientException;
 use ItkDev\Pretix\Exception\InvalidArgumentException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -119,10 +122,13 @@ class Client
      *
      * @return Collection|Event[]
      */
-    public function getEvents(): Collection
+    public function getEvents(array $options = []): Collection
     {
-        return $this->getCollection(Event::class,
-            'organizers/'.$this->organizer.'/events/');
+        return $this->getCollection(
+            Event::class,
+            'organizers/'.$this->organizer.'/events/',
+            $options
+        );
     }
 
     /**
@@ -131,8 +137,7 @@ class Client
      * @param object|string $event
      *                             The event or event slug
      *
-     * @return object
-     *                The result
+     * @return Event
      */
     public function getEvent($event)
     {
@@ -171,7 +176,7 @@ class Client
             Event::class,
             'organizers/'.$this->organizer.'/events/'.$eventSlug.'/clone/',
             [
-                'data' => $data,
+                'json' => $data,
             ]
         );
     }
@@ -192,7 +197,7 @@ class Client
             Event::class,
             'organizers/'.$this->organizer.'/events/'.$eventSlug.'/',
             [
-                'data' => $data,
+                'json' => $data,
             ]
         );
     }
@@ -219,8 +224,7 @@ class Client
      * @param object|string $event
      *                             The event or event slug
      *
-     * @return object
-     *                The result
+     * @return Collection<Item>
      */
     public function getItems($event)
     {
@@ -238,8 +242,7 @@ class Client
      * @param array         $options
      *                               The options
      *
-     * @return object
-     *                The result
+     * @return Collection<\ItkDev\Pretix\Entity\Quota>
      */
     public function getQuotas($event, array $options = [])
     {
@@ -267,12 +270,11 @@ class Client
     {
         $eventSlug = $this->getSlug($event);
 
-        $response = $this->post(
+        return $this->postEntity(
+            Quota::class,
             'organizers/'.$this->organizer.'/events/'.$eventSlug.'/quotas/',
-            ['data' => $data]
+            ['json' => $data]
         );
-
-        return $this->loadEntity(Quota::class, $response);
     }
 
     /**
@@ -293,9 +295,10 @@ class Client
         $eventSlug = $this->getSlug($event);
         $quotaId = $this->getId($quota);
 
-        return $this->patch(
+        return $this->patchEntity(
+            Quota::class,
             'organizers/'.$this->organizer.'/events/'.$eventSlug.'/quotas/'.$quotaId.'/',
-            ['data' => $data]
+            ['json' => $data]
         );
     }
 
@@ -307,15 +310,17 @@ class Client
      * @param int|object    $quota
      *                             The quota or quota id
      *
-     * @return object
-     *                The result
+     * @return \ItkDev\Pretix\Entity\QuotaAvailability
      */
     public function getQuotaAvailability($event, $quota)
     {
         $eventSlug = $this->getSlug($event);
         $quotaId = $this->getId($quota);
 
-        return $this->get('organizers/'.$this->organizer.'/events/'.$eventSlug.'/quotas/'.$quotaId.'/availability/');
+        return $this->getEntity(
+            QuotaAvailability::class,
+            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/quotas/'.$quotaId.'/availability/'
+        );
     }
 
     /**
@@ -324,14 +329,13 @@ class Client
      * @param object|string $event
      *                             The event or event slug
      *
-     * @return object
-     *                The result
+     * @return Collection<\ItkDev\Pretix\Entity\SubEvent>
      */
     public function getSubEvents($event)
     {
         $eventSlug = $this->getSlug($event);
 
-        return $this->get('organizers/'.$this->organizer.'/events/'.$eventSlug.'/subevents/');
+        return $this->getCollection(SubEvent::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/subevents/');
     }
 
     /**
@@ -342,17 +346,17 @@ class Client
      * @param array         $data
      *                             The data
      *
-     * @return object
-     *                The result
+     * @return SubEvent
      */
     public function createSubEvent($event, array $data)
     {
         $eventSlug = $this->getSlug($event);
 
-        return $this->post(
+        return $this->postEntity(
+            SubEvent::class,
             'organizers/'.$this->organizer.'/events/'.$eventSlug.'/subevents/',
             [
-                'data' => $data,
+                'json' => $data,
             ]
         );
     }
@@ -375,10 +379,11 @@ class Client
         $eventSlug = $this->getSlug($event);
         $subEventId = $this->getId($subEvent);
 
-        return $this->patch(
+        return $this->patchEntity(
+            SubEvent::class,
             'organizers/'.$this->organizer.'/events/'.$eventSlug.'/subevents/'.$subEventId.'/',
             [
-                'data' => $data,
+                'json' => $data,
             ]
         );
     }
@@ -433,9 +438,13 @@ class Client
      */
     public function createWebhook(array $data): Response
     {
-        return $this->post('organizers/'.$this->organizer.'/webhooks/', [
-            'data' => $data,
-        ]);
+        return $this->postEntity(
+            Webhook::class,
+            'organizers/'.$this->organizer.'/webhooks/',
+            [
+                'json' => $data,
+            ]
+        );
     }
 
     /**
@@ -450,10 +459,11 @@ class Client
      */
     public function updateWebhook($webhook, array $data): Response
     {
-        return $this->patch(
+        return $this->patchEntity(
+            Webhook::class,
             'organizers/'.$this->organizer.'/webhooks/'.$webhook->id.'/',
             [
-                'data' => $data,
+                'json' => $data,
             ]
         );
     }
@@ -509,6 +519,11 @@ class Client
     private function postEntity($class, $path, array $options = [])
     {
         return $this->requestEntity($class, 'POST', $path, $options);
+    }
+
+    private function patchEntity($class, $path, array $options = [])
+    {
+        return $this->requestEntity($class, 'PATCH', $path, $options);
     }
 
     /**

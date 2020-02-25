@@ -33,4 +33,14 @@ class Quota extends AbstractEntity
         'closed' => 'boolean',
         // Whether the quota is currently closed (see above field).
     ];
+
+    public function __construct(array $data) {
+        parent::__construct($data + ['availability' => null]);
+    }
+
+    public function setAvailability(QuotaAvailability $availability) {
+        $this->data['availability'] = $availability;
+
+        return $this;
+    }
 }

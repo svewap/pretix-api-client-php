@@ -16,6 +16,8 @@ namespace ItkDev\Pretix\Entity;
  * @method string getName(string $locale = NULL)
  * @method string getSlug()
  * @method bool   getTestmode()
+ * @method bool   hasSubevents()
+ * @method bool   isPublic()
  */
 class Event extends AbstractEntity
 {
