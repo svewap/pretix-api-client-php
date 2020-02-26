@@ -8,10 +8,10 @@
  * This source file is subject to the MIT license.
  */
 
-namespace ItkDev\Pretix\Collections;
+namespace ItkDev\Pretix\Api\Collections;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use ItkDev\Pretix\Entity\AbstractEntity;
+use ItkDev\Pretix\Api\Entity\AbstractEntity;
 
 class EntityCollection extends ArrayCollection implements EntityCollectionInterface
 {

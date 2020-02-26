@@ -8,23 +8,23 @@
  * This source file is subject to the MIT license.
  */
 
-namespace ItkDev\Pretix\Client;
+namespace ItkDev\Pretix\Api;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\Response as HttpResponse;
-use ItkDev\Pretix\Collections\EntityCollection;
-use ItkDev\Pretix\Collections\EntityCollectionInterface;
-use ItkDev\Pretix\Entity\AbstractEntity;
-use ItkDev\Pretix\Entity\Event;
-use ItkDev\Pretix\Entity\Item;
-use ItkDev\Pretix\Entity\Order;
-use ItkDev\Pretix\Entity\Organizer;
-use ItkDev\Pretix\Entity\Quota;
-use ItkDev\Pretix\Entity\QuotaAvailability;
-use ItkDev\Pretix\Entity\SubEvent;
-use ItkDev\Pretix\Entity\Webhook;
-use ItkDev\Pretix\Exception\ClientException;
-use ItkDev\Pretix\Exception\InvalidArgumentException;
+use ItkDev\Pretix\Api\Collections\EntityCollection;
+use ItkDev\Pretix\Api\Collections\EntityCollectionInterface;
+use ItkDev\Pretix\Api\Entity\AbstractEntity;
+use ItkDev\Pretix\Api\Entity\Event;
+use ItkDev\Pretix\Api\Entity\Item;
+use ItkDev\Pretix\Api\Entity\Order;
+use ItkDev\Pretix\Api\Entity\Organizer;
+use ItkDev\Pretix\Api\Entity\Quota;
+use ItkDev\Pretix\Api\Entity\QuotaAvailability;
+use ItkDev\Pretix\Api\Entity\SubEvent;
+use ItkDev\Pretix\Api\Entity\Webhook;
+use ItkDev\Pretix\Api\Exception\ClientException;
+use ItkDev\Pretix\Api\Exception\InvalidArgumentException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -88,7 +88,7 @@ class Client
      *
      * @param string $organizer The organizer slug
      *
-     * @return \ItkDev\Pretix\Client
+     * @return \ItkDev\Pretix\Api\Client
      */
     public function setOrganizer($organizer): self
     {
@@ -243,7 +243,7 @@ class Client
      * @param array         $options
      *                               The options
      *
-     * @return EntityCollectionInterface<\ItkDev\Pretix\Entity\Quota>
+     * @return EntityCollectionInterface<\ItkDev\Pretix\Api\Entity\Quota>
      */
     public function getQuotas($event, array $options = [])
     {
@@ -311,7 +311,7 @@ class Client
      * @param int|object    $quota
      *                             The quota or quota id
      *
-     * @return \ItkDev\Pretix\Entity\QuotaAvailability
+     * @return \ItkDev\Pretix\Api\Entity\QuotaAvailability
      */
     public function getQuotaAvailability($event, $quota)
     {
@@ -330,7 +330,7 @@ class Client
      * @param object|string $event
      *                             The event or event slug
      *
-     * @return EntityCollectionInterface<\ItkDev\Pretix\Entity\SubEvent>
+     * @return EntityCollectionInterface<\ItkDev\Pretix\Api\Entity\SubEvent>
      */
     public function getSubEvents($event)
     {
@@ -424,7 +424,7 @@ class Client
      * @param string $id
      *                   The id
      *
-     * @return \ItkDev\Pretix\Response
+     * @return \ItkDev\Pretix\Api\Response
      */
     public function getWebhook($id): Response
     {
@@ -437,7 +437,7 @@ class Client
      * @param array $data
      *                    The data
      *
-     * @return \ItkDev\Pretix\Response
+     * @return \ItkDev\Pretix\Api\Response
      */
     public function createWebhook(array $data): Webhook
     {
@@ -458,7 +458,7 @@ class Client
      * @param array  $data
      *                        The data
      *
-     * @return \ItkDev\Pretix\Response
+     * @return \ItkDev\Pretix\Api\Response
      */
     public function updateWebhook($webhook, array $data): Webhook
     {
@@ -497,7 +497,7 @@ class Client
      * @param object|string $event
      *                                 The event
      *
-     * @return \ItkDev\Pretix\Response
+     * @return \ItkDev\Pretix\Api\Response
      */
     public function getQuestions($organizer, $event): Response
     {
@@ -535,7 +535,7 @@ class Client
      * @param array  $options
      *                        The options
      *
-     * @return \ItkDev\Pretix\Response
+     * @return \ItkDev\Pretix\Api\Response
      */
     private function get($path, array $options = []): HttpResponse
     {
@@ -550,7 +550,7 @@ class Client
      * @param array  $options
      *                        The options
      *
-     * @return \ItkDev\Pretix\Response
+     * @return \ItkDev\Pretix\Api\Response
      */
     private function post($path, array $options = []): HttpResponse
     {
@@ -565,7 +565,7 @@ class Client
      * @param array  $options
      *                        The options
      *
-     * @return \ItkDev\Pretix\Response
+     * @return \ItkDev\Pretix\Api\Response
      */
     private function patch($path, array $options = []): HttpResponse
     {
@@ -578,7 +578,7 @@ class Client
      * @param string $path
      *                     The path
      *
-     * @return \ItkDev\Pretix\Response
+     * @return \ItkDev\Pretix\Api\Response
      */
     private function delete($path): HttpResponse
     {
@@ -595,7 +595,7 @@ class Client
      * @param array  $options
      *                        The options
      *
-     * @return \ItkDev\Pretix\Response The result
+     * @return \ItkDev\Pretix\Api\Response The result
      *                                 The result
      */
     private function request(
@@ -670,7 +670,7 @@ class Client
     /**
      * Get event slug.
      *
-     * @param \ItkDev\Pretix\Item|string $event The event or event slug
+     * @param \ItkDev\Pretix\Api\Entity\Event|string $event The event or event slug
      *
      * @return string The event slug
      */

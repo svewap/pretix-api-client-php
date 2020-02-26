@@ -8,7 +8,7 @@
  * This source file is subject to the MIT license.
  */
 
-namespace ItkDev\Pretix\Collections;
+namespace ItkDev\Pretix\Api\Collections;
 
 use Doctrine\Common\Collections\Collection;
 

@@ -8,11 +8,11 @@
  * This source file is subject to the MIT license.
  */
 
-namespace ItkDev\Pretix\Entity;
+namespace ItkDev\Pretix\Api\Entity;
 
-use ItkDev\Pretix\Collections\EntityCollection;
-use ItkDev\Pretix\Collections\EntityCollectionInterface;
-use ItkDev\Pretix\Exception\InvalidArgumentException;
+use ItkDev\Pretix\Api\Collections\EntityCollection;
+use ItkDev\Pretix\Api\Collections\EntityCollectionInterface;
+use ItkDev\Pretix\Api\Exception\InvalidArgumentException;
 
 /**
  * @method int   getId()

@@ -22,12 +22,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "ItkDev\\Pretix\\": "src/"
+            "ItkDev\\Pretix\\Api\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ItkDev\\Pretix\\": "tests/"
+            "ItkDev\\Pretix\\Api\\": "tests/"
         }
     },
     "scripts": {

@@ -8,13 +8,13 @@
  * This source file is subject to the MIT license.
  */
 
-namespace ItkDev\Pretix\Entity\Order;
+namespace ItkDev\Pretix\Api\Entity\Order;
 
-use ItkDev\Pretix\Collections\EntityCollection;
-use ItkDev\Pretix\Collections\EntityCollectionInterface;
-use ItkDev\Pretix\Entity\AbstractEntity;
-use ItkDev\Pretix\Entity\SubEvent;
-use ItkDev\Pretix\Exception\InvalidArgumentException;
+use ItkDev\Pretix\Api\Collections\EntityCollection;
+use ItkDev\Pretix\Api\Collections\EntityCollectionInterface;
+use ItkDev\Pretix\Api\Entity\AbstractEntity;
+use ItkDev\Pretix\Api\Entity\SubEvent;
+use ItkDev\Pretix\Api\Exception\InvalidArgumentException;
 
 /**
  * @see https://docs.pretix.eu/en/latest/api/resources/orders.html#order-position-resource

@@ -8,7 +8,7 @@
  * This source file is subject to the MIT license.
  */
 
-namespace ItkDev\Pretix\Client;
+namespace ItkDev\Pretix\Api;
 
 /**
  * @internal

@@ -8,9 +8,9 @@
  * This source file is subject to the MIT license.
  */
 
-namespace ItkDev\Pretix\Collections;
+namespace ItkDev\Pretix\Api\Collections;
 
-use ItkDev\Pretix\Entity\Order;
+use ItkDev\Pretix\Api\Entity\Order;
 use PHPUnit\Framework\TestCase;
 
 class EntityCollectionTest extends TestCase

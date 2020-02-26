@@ -8,7 +8,7 @@
  * This source file is subject to the MIT license.
  */
 
-namespace ItkDev\Pretix\Client;
+namespace ItkDev\Pretix\Api;
 
 use PHPUnit\Framework\TestCase;
 
@@ -21,7 +21,7 @@ abstract class AbstractClientTest extends TestCase
     /** @var array */
     private $clientOptions;
 
-    /** @var \ItkDev\Pretix\Client */
+    /** @var \ItkDev\Pretix\Api\Client */
     private $client;
 
     protected function setUp(): void

@@ -8,7 +8,7 @@
  * This source file is subject to the MIT license.
  */
 
-namespace ItkDev\Pretix\Entity;
+namespace ItkDev\Pretix\Api\Entity;
 
 use PHPUnit\Framework\TestCase;
 
