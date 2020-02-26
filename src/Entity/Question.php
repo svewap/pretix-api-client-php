@@ -16,47 +16,47 @@ namespace ItkDev\Pretix\Entity;
 class Question extends AbstractEntity
 {
     protected static $fields = [
-        'id' => 'integer',
         // Internal ID of the question
-        'question' => 'multi-lingual string',
+        'id' => 'integer',
         // The field label shown to the customer
-        'help_text' => 'multi-lingual string',
+        'question' => 'multi-lingual string',
         // The help text shown to the customer
-        'type' => 'string',
+        'help_text' => 'multi-lingual string',
         // The expected type of answer.
-        'required' => 'boolean',
+        'type' => 'string',
         // If true, the question needs to be filled out.
-        'position' => 'integer',
+        'required' => 'boolean',
         // An integer, used for sorting
-        'items' => 'list of integers',
+        'position' => 'integer',
         // List of item IDs this question is assigned to.
-        'identifier' => 'string',
+        'items' => 'list of integers',
         // An arbitrary string that can be used for matching with other sources.
-        'ask_during_checkin' => 'boolean',
+        'identifier' => 'string',
         // If true, this question will not be asked while buying the ticket, but will show up when redeeming the ticket instead.
-        'hidden' => 'boolean',
+        'ask_during_checkin' => 'boolean',
         // If true, the question will only be shown in the backend.
-        'print_on_invoice' => 'boolean',
+        'hidden' => 'boolean',
         // If true, the question will only be shown on invoices.
+        'print_on_invoice' => 'boolean',
         'options' => [
             // In case of question type C or M, this lists the available objects. Only writable during creation, use separate endpoint to modify this later.
             'type' => 'list of objects',
             'object' => [
-                'id' => 'integer',
                 // Internal ID of the option
-                'position' => 'integer',
+                'id' => 'integer',
                 // An integer, used for sorting
-                'identifier' => 'string',
+                'position' => 'integer',
                 // An arbitrary string that can be used for matching with other sources.
-                'answer' => 'multi-lingual string',
+                'identifier' => 'string',
                 // The displayed value of this option
+                'answer' => 'multi-lingual string',
             ],
         ],
-        'dependency_question' => 'integer',
         // Internal ID of a different question. The current question will only be shown if the question given in this attribute is set to the value given in dependency_value. This cannot be combined with ask_during_checkin.
-        'dependency_values' => 'list of strings',
+        'dependency_question' => 'integer',
         // If dependency_question is set to a boolean question, this should be ["True"] or ["False"]. Otherwise, it should be a list of identifier values of question options.
-        'dependency_value' => 'string',
+        'dependency_values' => 'list of strings',
         // An old version of dependency_values that only allows for one value. Deprecated.
+        'dependency_value' => 'string',
     ];
 }

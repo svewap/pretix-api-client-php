@@ -10,13 +10,14 @@
 
 namespace ItkDev\Pretix\Client;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\Response as HttpResponse;
+use ItkDev\Pretix\Collections\EntityCollection;
+use ItkDev\Pretix\Collections\EntityCollectionInterface;
 use ItkDev\Pretix\Entity\AbstractEntity;
 use ItkDev\Pretix\Entity\Event;
 use ItkDev\Pretix\Entity\Item;
+use ItkDev\Pretix\Entity\Order;
 use ItkDev\Pretix\Entity\Organizer;
 use ItkDev\Pretix\Entity\Quota;
 use ItkDev\Pretix\Entity\QuotaAvailability;
@@ -99,9 +100,9 @@ class Client
     /**
      * Get organizers.
      *
-     * @return Collection<Organizer>
+     * @return EntityCollectionInterface<Organizer>
      */
-    public function getOrganizers(): Collection
+    public function getOrganizers(): EntityCollectionInterface
     {
         return $this->getCollection(Organizer::class, 'organizers/');
     }
@@ -120,9 +121,9 @@ class Client
     /**
      * Get Events.
      *
-     * @return Collection|Event[]
+     * @return EntityCollectionInterface|Event[]
      */
-    public function getEvents(array $options = []): Collection
+    public function getEvents(array $options = []): EntityCollectionInterface
     {
         return $this->getCollection(
             Event::class,
@@ -224,7 +225,7 @@ class Client
      * @param object|string $event
      *                             The event or event slug
      *
-     * @return Collection<Item>
+     * @return EntityCollectionInterface<Item>
      */
     public function getItems($event)
     {
@@ -242,7 +243,7 @@ class Client
      * @param array         $options
      *                               The options
      *
-     * @return Collection<\ItkDev\Pretix\Entity\Quota>
+     * @return EntityCollectionInterface<\ItkDev\Pretix\Entity\Quota>
      */
     public function getQuotas($event, array $options = [])
     {
@@ -329,7 +330,7 @@ class Client
      * @param object|string $event
      *                             The event or event slug
      *
-     * @return Collection<\ItkDev\Pretix\Entity\SubEvent>
+     * @return EntityCollectionInterface<\ItkDev\Pretix\Entity\SubEvent>
      */
     public function getSubEvents($event)
     {
@@ -409,10 +410,12 @@ class Client
 
     /**
      * Get webhooks.
+     *
+     * @return EntityCollectionInterface|Webhook[]
      */
-    public function getWebhooks(): Response
+    public function getWebhooks(): EntityCollectionInterface
     {
-        return $this->get('organizers/'.$this->organizer.'/webhooks/');
+        return $this->getCollection(Webhook::class, 'organizers/'.$this->organizer.'/webhooks/');
     }
 
     /**
@@ -436,7 +439,7 @@ class Client
      *
      * @return \ItkDev\Pretix\Response
      */
-    public function createWebhook(array $data): Response
+    public function createWebhook(array $data): Webhook
     {
         return $this->postEntity(
             Webhook::class,
@@ -457,7 +460,7 @@ class Client
      *
      * @return \ItkDev\Pretix\Response
      */
-    public function updateWebhook($webhook, array $data): Response
+    public function updateWebhook($webhook, array $data): Webhook
     {
         return $this->patchEntity(
             Webhook::class,
@@ -477,15 +480,13 @@ class Client
      *                                 The event
      * @param string        $code
      *                                 The code
-     *
-     * @return \ItkDev\Pretix\Response
      */
-    public function getOrder($organizer, $event, $code): Response
+    public function getOrder($organizer, $event, $code): Order
     {
         $organizerSlug = $this->getSlug($organizer);
         $eventSlug = $this->getSlug($event);
 
-        return $this->get('organizers/'.$organizerSlug.'/events/'.$eventSlug.'/orders/'.$code.'/');
+        return $this->getEntity(Order::class, 'organizers/'.$organizerSlug.'/events/'.$eventSlug.'/orders/'.$code.'/');
     }
 
     /**
@@ -645,7 +646,7 @@ class Client
         string $method,
         string $path,
         array $options = []
-    ): Collection {
+    ): EntityCollectionInterface {
         if (!is_subclass_of($class, AbstractEntity::class)) {
             throw new \RuntimeException(sprintf('Class %s must be an %s', $class, AbstractEntity::class));
         }
@@ -657,10 +658,10 @@ class Client
     private function loadCollection(
         string $class,
         HttpResponse $response
-    ): Collection {
+    ): EntityCollectionInterface {
         $data = json_decode((string) $response->getBody(), true);
 
-        return new ArrayCollection(array_map(static function ($data) use ($class
+        return new EntityCollection(array_map(static function ($data) use ($class
         ) {
             return new $class($data);
         }, $data['results']));

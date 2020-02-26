@@ -18,55 +18,57 @@ namespace ItkDev\Pretix\Entity;
 class SubEvent extends AbstractEntity
 {
     protected static $fields = [
-        'id' => 'integer',
         // Internal ID of the sub-event
-        'name' => 'multi-lingual string',
+        'id' => 'integer',
         // The sub-event’s full name
-        'event' => 'string',
+        'name' => 'multi-lingual string',
         // The slug of the parent event
-        'active' => 'boolean',
+        'event' => 'string',
         // If true, the sub-event ticket shop is publicly available.
-        'is_public' => 'boolean',
+        'active' => 'boolean',
         // If true, the sub-event ticket shop is publicly shown in lists.
-        'date_from' => 'datetime',
+        'is_public' => 'boolean',
         // The sub-event’s start date
-        'date_to' => 'datetime',
+        'date_from' => 'datetime',
         // The sub-event’s end date (or null)
-        'date_admission' => 'datetime',
+        'date_to' => 'datetime',
         // The sub-event’s admission date (or null)
-        'presale_start' => 'datetime',
+        'date_admission' => 'datetime',
         // The sub-date at which the ticket shop opens (or null)
-        'presale_end' => 'datetime',
+        'presale_start' => 'datetime',
         // The sub-date at which the ticket shop closes (or null)
-        'location' => 'multi-lingual string',
+        'presale_end' => 'datetime',
         // The sub-event location (or null)
-        'geo_lat' => 'float',
+        'location' => 'multi-lingual string',
         // Latitude of the location (or null)
-        'geo_lon' => 'float',
+        'geo_lat' => 'float',
         // Longitude of the location (or null)
-        'item_price_overrides' => [ // List of items for which this sub-event overrides the default price
+        'geo_lon' => 'float',
+        // List of items for which this sub-event overrides the default price
+        'item_price_overrides' => [
             'type' => 'list of objects',
             'object' => [
-                'item' => 'integer',
                 // The internal item ID
-                'price' => 'money (string)',
+                'item' => 'integer',
                 // The price or null for the default price
+                'price' => 'money (string)',
             ],
         ],
-        'variation_price_overrides' => [ // List of variations for which this sub-event overrides the default price
+        // List of variations for which this sub-event overrides the default price
+        'variation_price_overrides' => [
             'type' => 'list of objects',
             'object' => [
-                'variation' => 'integer',
                 // The internal variation ID
-                'price' => 'money (string)',
+                'variation' => 'integer',
                 // The price or null for the default price
+                'price' => 'money (string)',
             ],
         ],
-        'meta_data' => 'object',
         // Values set for organizer-specific meta data parameters.
-        'seating_plan' => 'integer',
+        'meta_data' => 'object',
         // If reserved seating is in use, the ID of a seating plan. Otherwise null.
-        'seat_category_mapping' => 'object',
+        'seating_plan' => 'integer',
         // An object mapping categories of the seating plan (strings) to items in the event (integers or null).
+        'seat_category_mapping' => 'object',
     ];
 }

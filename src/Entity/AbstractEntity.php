@@ -10,10 +10,12 @@
 
 namespace ItkDev\Pretix\Entity;
 
+use ItkDev\Pretix\Collections\EntityCollection;
+use ItkDev\Pretix\Collections\EntityCollectionInterface;
 use ItkDev\Pretix\Exception\InvalidArgumentException;
 
 /**
- * @method int getId()
+ * @method int   getId()
  * @method array toArray()
  */
 class AbstractEntity
@@ -34,9 +36,10 @@ class AbstractEntity
      *
      * @return array
      */
-    public function toArray() {
+    public function toArray()
+    {
         return array_map(static function ($value) {
-            return $value instanceof AbstractEntity ? $value->toArray() : $value;
+            return ($value instanceof AbstractEntity || $value instanceof EntityCollectionInterface) ? $value->toArray() : $value;
         }, $this->data);
     }
 
@@ -83,5 +86,12 @@ class AbstractEntity
         }
 
         return null === $locale ? $value : $value[$locale];
+    }
+
+    protected function buildCollection($class, array $items)
+    {
+        return new EntityCollection(array_map(static function (array $data) use ($class) {
+            return new $class($data);
+        }, $items));
     }
 }

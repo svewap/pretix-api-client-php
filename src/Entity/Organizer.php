@@ -19,9 +19,9 @@ namespace ItkDev\Pretix\Entity;
 class Organizer extends AbstractEntity
 {
     protected static $fields = [
-        'name' => 'string',
         // The organizer’s full name, i.e. the name of an organization or company.
-        'slug' => 'string',
+        'name' => 'string',
         // A short form of the name, used e.g. in URLs.
+        'slug' => 'string',
     ];
 }

@@ -10,112 +10,127 @@
 
 namespace ItkDev\Pretix\Entity;
 
+use ItkDev\Pretix\Entity\Order\Position;
+
 /**
  * @see https://docs.pretix.eu/en/latest/api/resources/orders.html
+ *
+ * @method mixed getPositions()
  */
 class Order extends AbstractEntity
 {
     protected static $fields = [
-        'code' => 'string',
         // Order code
-        'status' => 'string',
+        'code' => 'string',
         // Order status, one of:
-        'testmode' => 'boolean',
+        'status' => 'string',
         // If true, this order was created when the event was in test mode. Only orders in test mode can be deleted.
-        'secret' => 'string',
+        'testmode' => 'boolean',
         // The secret contained in the link sent to the customer
-        'email' => 'string',
+        'secret' => 'string',
         // The customer email address
-        'locale' => 'string',
+        'email' => 'string',
         // The locale used for communication with this customer
-        'sales_channel' => 'string',
+        'locale' => 'string',
         // Channel this sale was created through, such as "web".
-        'datetime' => 'datetime',
+        'sales_channel' => 'string',
         // Time of order creation
-        'expires' => 'datetime',
+        'datetime' => 'datetime',
         // The order will expire, if it is still pending by this time
-        'payment_date' => 'date',
+        'expires' => 'datetime',
         // DEPRECATED AND INACCURATE Date of payment receipt
-        'payment_provider' => 'string',
+        'payment_date' => 'date',
         // DEPRECATED AND INACCURATE Payment provider used for this order
-        'total' => 'money (string)',
+        'payment_provider' => 'string',
         // Total value of this order
-        'comment' => 'string',
+        'total' => 'money (string)',
         // Internal comment on this order
-        'checkin_attention' => 'boolean',
+        'comment' => 'string',
         // If true, the check-in app should show a warning that this ticket requires special attention if a ticket of this order is scanned.
-        'invoice_address' => [ // Invoice address information (can be null)
+        'checkin_attention' => 'boolean',
+        // Invoice address information (can be null)
+        'invoice_address' => [
             'type' => 'object',
             'object' => [
-                'last_modified' => 'datetime',
                 // Last modification date of the address
-                'company' => 'string',
+                'last_modified' => 'datetime',
                 // Customer company name
-                'is_business' => 'boolean',
+                'company' => 'string',
                 // Business or individual customers (always false for orders created before pretix 1.7, do not rely on it).
-                'name' => 'string',
+                'is_business' => 'boolean',
                 // Customer name
-                'name_parts' => 'object of strings',
+                'name' => 'string',
                 // Customer name decomposition
-                'street' => 'string',
+                'name_parts' => 'object of strings',
                 // Customer street
-                'zipcode' => 'string',
+                'street' => 'string',
                 // Customer ZIP code
-                'city' => 'string',
+                'zipcode' => 'string',
                 // Customer city
-                'country' => 'string',
+                'city' => 'string',
                 // Customer country code
-                'state' => 'string',
+                'country' => 'string',
                 // Customer state (ISO 3166-2 code). Only supported in AU, BR, CA, CN, MY, MX, and US.
-                'internal_reference' => 'string',
+                'state' => 'string',
                 // Customer’s internal reference to be printed on the invoice
-                'vat_id' => 'string',
+                'internal_reference' => 'string',
                 // Customer VAT ID
-                'vat_id_validated' => 'string',
+                'vat_id' => 'string',
                 // true, if the VAT ID has been validated against the EU VAT service and validation was successful. This only happens in rare cases.
+                'vat_id_validated' => 'string',
             ],
         ],
-        'positions' => 'list of objects',
         // List of order positions (see below). By default, only non-canceled positions are included.
-        'fees' => [ // List of fees included in the order total. By default, only non-canceled fees are included.
+        'positions' => 'list of objects',
+        // List of fees included in the order total. By default, only non-canceled fees are included.
+        'fees' => [
             'type' => 'list of objects',
             'object' => [
-                'fee_type' => 'string',
                 // Type of fee (currently payment, passbook, other)
-                'value' => 'money (string)',
+                'fee_type' => 'string',
                 // Fee amount
-                'description' => 'string',
+                'value' => 'money (string)',
                 // Human-readable string with more details (can be empty)
-                'internal_type' => 'string',
+                'description' => 'string',
                 // Internal string (i.e. ID of the payment provider), can be empty
-                'tax_rate' => 'decimal (string)',
+                'internal_type' => 'string',
                 // VAT rate applied for this fee
-                'tax_value' => 'money (string)',
+                'tax_rate' => 'decimal (string)',
                 // VAT included in this fee
-                'tax_rule' => 'integer',
+                'tax_value' => 'money (string)',
                 // The ID of the used tax rule (or null)
-                'canceled' => 'boolean',
+                'tax_rule' => 'integer',
                 // Whether or not this fee has been canceled.
+                'canceled' => 'boolean',
             ],
         ],
-        'downloads' => [ // List of ticket download options for order-wise ticket downloading. This might be a multi-page PDF or a ZIP file of tickets for outputs that do not support multiple tickets natively. See also order position download options.
+        // List of ticket download options for order-wise ticket downloading. This might be a multi-page PDF or a ZIP file of tickets for outputs that do not support multiple tickets natively. See also order position download options.
+        'downloads' => [
             'type' => 'list of objects',
             'object' => [
-                'output' => 'string',
                 // Ticket output provider (e.g. pdf, passbook)
-                'url' => 'string',
+                'output' => 'string',
                 // Download URL
+                'url' => 'string',
             ],
         ],
-        'require_approval' => 'boolean',
         // If true and the order is pending, this order needs approval by an organizer before it can continue. If true and the order is canceled, this order has been denied by the event organizer.
-        'url' => 'string',
+        'require_approval' => 'boolean',
         // The full URL to the order confirmation page
-        'payments' => 'list of objects',
+        'url' => 'string',
         // List of payment processes (see below)
-        'refunds' => 'list of objects',
+        'payments' => 'list of objects',
         // List of refund processes (see below)
-        'last_modified' => 'datetime',
+        'refunds' => 'list of objects',
         // Last modification of this object
+        'last_modified' => 'datetime',
     ];
+
+    public function __construct(array $data)
+    {
+        if (isset($data['positions'])) {
+            $data['positions'] = $this->buildCollection(Position::class, $data['positions']);
+        }
+        parent::__construct($data);
+    }
 }

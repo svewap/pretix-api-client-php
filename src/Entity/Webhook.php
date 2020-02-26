@@ -12,21 +12,27 @@ namespace ItkDev\Pretix\Entity;
 
 /**
  * @see https://docs.pretix.eu/en/latest/api/resources/webhooks.html
+ *
+ * @method bool     getEnabled()
+ * @method string   getTargetUrl()
+ * @method string   getAllEvents()
+ * @method string[] getLimitEvents()
+ * @method string[] getActionTypes()
  */
 class Webhook extends AbstractEntity
 {
     protected static $fields = [
-        'id' => 'integer',
         // Internal ID of the webhook
-        'enabled' => 'boolean',
+        'id' => 'integer',
         // If false, this webhook will not receive any notifications
-        'target_url' => 'string',
+        'enabled' => 'boolean',
         // The URL to call
-        'all_events' => 'boolean',
+        'target_url' => 'string',
         // If true, this webhook will receive notifications on all events of this organizer
-        'limit_events' => 'list of strings',
+        'all_events' => 'boolean',
         // If all_events is false, this is a list of event slugs this webhook is active for
-        'action_types' => 'list of strings',
+        'limit_events' => 'list of strings',
         // A list of action type filters that limit the notifications sent to this webhook. See below for valid values
+        'action_types' => 'list of strings',
     ];
 }

@@ -22,45 +22,45 @@ namespace ItkDev\Pretix\Entity;
 class Event extends AbstractEntity
 {
     protected static $fields = [
-        'name' => 'multi-lingual string',
         // The event’s full name
-        'slug' => 'string',
+        'name' => 'multi-lingual string',
         // A short form of the name, used e.g. in URLs.
-        'live' => 'boolean',
+        'slug' => 'string',
         // If <code class="docutils literal notranslate"><span class="pre">true</span></code>, the event ticket shop is publicly available.
-        'testmode' => 'boolean',
+        'live' => 'boolean',
         // If <code class="docutils literal notranslate"><span class="pre">true</span></code>, the ticket shop is in test mode.
-        'currency' => 'string',
+        'testmode' => 'boolean',
         // The currency this event is handled in.
-        'date_from' => 'datetime',
+        'currency' => 'string',
         // The event’s start date
-        'date_to' => 'datetime',
+        'date_from' => 'datetime',
         // The event’s end date (or <code class="docutils literal notranslate"><span class="pre">null</span></code>)
-        'date_admission' => 'datetime',
+        'date_to' => 'datetime',
         // The event’s admission date (or <code class="docutils literal notranslate"><span class="pre">null</span></code>)
-        'is_public' => 'boolean',
+        'date_admission' => 'datetime',
         // If <code class="docutils literal notranslate"><span class="pre">true</span></code>, the event shows up in places like the organizer’s public list of events
-        'presale_start' => 'datetime',
+        'is_public' => 'boolean',
         // The date at which the ticket shop opens (or <code class="docutils literal notranslate"><span class="pre">null</span></code>)
-        'presale_end' => 'datetime',
+        'presale_start' => 'datetime',
         // The date at which the ticket shop closes (or <code class="docutils literal notranslate"><span class="pre">null</span></code>)
-        'location' => 'multi-lingual string',
+        'presale_end' => 'datetime',
         // The event location (or <code class="docutils literal notranslate"><span class="pre">null</span></code>)
-        'geo_lat' => 'float',
+        'location' => 'multi-lingual string',
         // Latitude of the location (or <code class="docutils literal notranslate"><span class="pre">null</span></code>)
-        'geo_lon' => 'float',
+        'geo_lat' => 'float',
         // Longitude of the location (or <code class="docutils literal notranslate"><span class="pre">null</span></code>)
-        'has_subevents' => 'boolean',
+        'geo_lon' => 'float',
         // <code class="docutils literal notranslate"><span class="pre">true</span></code> if the event series feature is active for this event. Cannot change after event is created.
-        'meta_data' => 'object',
+        'has_subevents' => 'boolean',
         // Values set for organizer-specific meta data parameters.
-        'plugins' => 'list',
+        'meta_data' => 'object',
         // A list of package names of the enabled plugins for this event.
-        'seating_plan' => 'integer',
+        'plugins' => 'list',
         // If reserved seating is in use, the ID of a seating plan. Otherwise <code class="docutils literal notranslate"><span class="pre">null</span></code>.
-        'seat_category_mapping' => 'object',
+        'seating_plan' => 'integer',
         // An object mapping categories of the seating plan (strings) to items in the event (integers or <code class="docutils literal notranslate"><span class="pre">null</span></code>).
-        'timezone' => 'string',
+        'seat_category_mapping' => 'object',
         // Event timezone name
+        'timezone' => 'string',
     ];
 }
