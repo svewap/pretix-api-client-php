@@ -98,6 +98,17 @@ class Client
     }
 
     /**
+     * Get api endpoints.
+     *
+     * @return array
+     */
+    public function getApiEndpoints(): array {
+        $response = $this->get('/');
+
+        return json_decode((string)$response->getBody(), true);
+    }
+
+    /**
      * Get organizers.
      *
      * @return EntityCollectionInterface<Organizer>
@@ -487,6 +498,18 @@ class Client
         $eventSlug = $this->getSlug($event);
 
         return $this->getEntity(Order::class, 'organizers/'.$organizerSlug.'/events/'.$eventSlug.'/orders/'.$code.'/');
+    }
+
+    /**
+     * @see https://docs.pretix.eu/en/latest/api/resources/orders.html#get--api-v1-organizers-(organizer)-events-(event)-orderpositions-
+     * @param $event
+     * @param array $query
+     *
+     */
+    public function getOrderPositions($event, array $query = []) : EntityCollectionInterface {
+        $eventSlug = $this->getSlug($event);
+
+        return $this->getCollection(Order\Position::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/orderpositions/');
     }
 
     /**
