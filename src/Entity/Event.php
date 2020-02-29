@@ -63,4 +63,14 @@ class Event extends AbstractEntity
         // Event timezone name
         'timezone' => 'string',
     ];
+
+    public function getUrl()
+    {
+        return sprintf('%s/control/event/%s/%s/', $this->getPretixUrl(), $this->getOrganizerSlug(), $this->getSlug());
+    }
+
+    public function getShopUrl()
+    {
+        return sprintf('%s/%s/%s/', $this->getPretixUrl(), $this->getOrganizerSlug(), $this->getSlug());
+    }
 }

@@ -16,7 +16,7 @@ use ItkDev\Pretix\Api\Exception\InvalidArgumentException;
 
 /**
  * @method int   getId()
- * @method array toArray()
+ * @method array getPretixOptions() Get the pretix options for this entity.
  */
 class AbstractEntity
 {
@@ -29,6 +29,21 @@ class AbstractEntity
     public function __construct(array $data)
     {
         $this->data = $data;
+    }
+
+    public function getUrl()
+    {
+        return $this->getPretixOptions()['url'] ?? null;
+    }
+
+    public function getPretixUrl()
+    {
+        return $this->getPretixOptions()['url'] ?? null;
+    }
+
+    public function getOrganizerSlug()
+    {
+        return $this->getPretixOptions()['organizer'] ?? null;
     }
 
     /**
@@ -46,7 +61,8 @@ class AbstractEntity
     public function __call($name, $arguments)
     {
         if (preg_match('/^get(?P<key>.+)$/', $name, $matches)) {
-            $key = lcfirst($matches['key']);
+            // Convert to snake_case (cf. https://stackoverflow.com/a/35719689).
+            $key = strtolower(preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $matches['key']));
             if (is_array($this->data) && array_key_exists($key, $this->data)) {
                 return $this->getValue($key, $arguments);
             }

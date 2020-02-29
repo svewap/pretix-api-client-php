@@ -99,13 +99,12 @@ class Client
 
     /**
      * Get api endpoints.
-     *
-     * @return array
      */
-    public function getApiEndpoints(): array {
+    public function getApiEndpoints(): array
+    {
         $response = $this->get('/');
 
-        return json_decode((string)$response->getBody(), true);
+        return json_decode((string) $response->getBody(), true);
     }
 
     /**
@@ -502,11 +501,11 @@ class Client
 
     /**
      * @see https://docs.pretix.eu/en/latest/api/resources/orders.html#get--api-v1-organizers-(organizer)-events-(event)-orderpositions-
-     * @param $event
-     * @param array $query
      *
+     * @param $event
      */
-    public function getOrderPositions($event, array $query = []) : EntityCollectionInterface {
+    public function getOrderPositions($event, array $query = []): EntityCollectionInterface
+    {
         $eventSlug = $this->getSlug($event);
 
         return $this->getCollection(Order\Position::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/orderpositions/');
@@ -619,7 +618,7 @@ class Client
      *                        The options
      *
      * @return \ItkDev\Pretix\Api\Response The result
-     *                                 The result
+     *                                     The result
      */
     private function request(
         $method,
@@ -684,9 +683,9 @@ class Client
     ): EntityCollectionInterface {
         $data = json_decode((string) $response->getBody(), true);
 
-        return new EntityCollection(array_map(static function ($data) use ($class
+        return new EntityCollection(array_map(function ($data) use ($class
         ) {
-            return new $class($data);
+            return $this->createEntity($class, $data);
         }, $data['results']));
     }
 
@@ -730,6 +729,16 @@ class Client
     {
         $data = json_decode((string) $response->getBody(), true);
 
-        return new $class($data);
+        return $this->createEntity($class, $data);
+    }
+
+    private function createEntity(string $class, array $data)
+    {
+        return new $class($data + [
+            'pretix_options' => [
+                'url' => $this->url,
+                'organizer' => $this->organizer,
+            ],
+        ]);
     }
 }

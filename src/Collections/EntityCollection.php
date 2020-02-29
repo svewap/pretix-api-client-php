@@ -21,7 +21,7 @@ class EntityCollection extends ArrayCollection implements EntityCollectionInterf
 
         if ($recursive) {
             foreach ($elements as &$element) {
-                if ($element instanceof AbstractEntity || $value instanceof EntityCollectionInterface) {
+                if ($element instanceof AbstractEntity || $element instanceof EntityCollectionInterface) {
                     $element = $element->toArray($recursive);
                 }
             }

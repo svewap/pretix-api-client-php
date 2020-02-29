@@ -13,7 +13,7 @@ namespace ItkDev\Pretix\Api\Entity;
 /**
  * @see https://docs.pretix.eu/en/latest/api/resources/subevents.html
  *
- * @method Event getEvent()
+ * @method string|Event getEvent()
  */
 class SubEvent extends AbstractEntity
 {
@@ -71,4 +71,24 @@ class SubEvent extends AbstractEntity
         // An object mapping categories of the seating plan (strings) to items in the event (integers or null).
         'seat_category_mapping' => 'object',
     ];
+
+    /**
+     * @return string
+     */
+    public function getEventSlug()
+    {
+        $event = $this->getEvent();
+
+        return $event instanceof Event ? $event->getSlug() : $event;
+    }
+
+    public function getUrl()
+    {
+        return sprintf('%s/control/event/%s/%s/subevents/%d/', $this->getPretixUrl(), $this->getOrganizerSlug(), $this->getEvent(), $this->getId());
+    }
+
+    public function getShopUrl()
+    {
+        return sprintf('%s/%s/%s/%d/', $this->getPretixUrl(), $this->getOrganizerSlug(), $this->getEvent(), $this->getId());
+    }
 }
