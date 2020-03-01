@@ -48,10 +48,8 @@ class AbstractEntity
 
     /**
      * Convert entity to array.
-     *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return array_map(static function ($value) {
             return ($value instanceof AbstractEntity || $value instanceof EntityCollectionInterface) ? $value->toArray() : $value;
@@ -78,6 +76,11 @@ class AbstractEntity
         }
 
         throw new \Error(sprintf('Call to undefined method %s::%s()', static::class, $name));
+    }
+
+    protected function set(string $key, $value)
+    {
+        $this->data[$key] = $value;
     }
 
     protected function getValue($key, $arguments)

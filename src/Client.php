@@ -482,6 +482,34 @@ class Client
     }
 
     /**
+     * @param string|\ItkDev\Pretix\Api\Entity\Event $event
+     */
+    public function getOrders($event, array $query = []): EntityCollection
+    {
+        $eventSlug = $this->getSlug($event);
+
+        $orders = $this->getCollection(Order::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/orders/');
+
+        $subEventId = isset($query['subevent']) ? $this->getId($query['subevent']) : null;
+        /** @var Order $order */
+        foreach ($orders as $order) {
+            $order->setEvent($event);
+
+            if (null !== $subEventId) {
+                // Filter order positions on sub-events.
+                $filtered = $order->getPositions()->filter(function (
+                    Order\Position $position
+                ) use ($subEventId) {
+                    return $this->getId($position->getSubevent()) === $subEventId;
+                });
+                $order->setPositions($filtered);
+            }
+        }
+
+        return $orders;
+    }
+
+    /**
      * Get order.
      *
      * @param object|string $organizer
@@ -692,7 +720,8 @@ class Client
     /**
      * Get event slug.
      *
-     * @param \ItkDev\Pretix\Api\Entity\Event|string $event The event or event slug
+     * @param \ItkDev\Pretix\Api\Entity\Event|string $event The event or event
+     *                                                      slug
      *
      * @return string The event slug
      */

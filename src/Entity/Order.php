@@ -10,12 +10,14 @@
 
 namespace ItkDev\Pretix\Api\Entity;
 
+use ItkDev\Pretix\Api\Collections\EntityCollectionInterface;
 use ItkDev\Pretix\Api\Entity\Order\Position;
 
 /**
  * @see https://docs.pretix.eu/en/latest/api/resources/orders.html
  *
- * @method mixed getPositions()
+ * @method string                                                     getCode()
+ * @method \ItkDev\Pretix\Api\Collections\EntityCollection|Position[] getPositions()
  */
 class Order extends AbstractEntity
 {
@@ -132,5 +134,24 @@ class Order extends AbstractEntity
             $data['positions'] = $this->buildCollection(Position::class, $data['positions']);
         }
         parent::__construct($data);
+    }
+
+    public function setEvent($event)
+    {
+        $this->set('event', $event);
+    }
+
+    public function setPositions(EntityCollectionInterface $positions)
+    {
+        $this->set('positions', $positions);
+        // @TODO Update totals on order.
+    }
+
+    public function getUrl()
+    {
+        $event = $this->getEvent();
+        $eventSlug = $event instanceof Event ? $event->getSlug() : $event;
+
+        return sprintf('%s/control/event/%s/%s/orders/%s', $this->getPretixUrl(), $this->getOrganizerSlug(), $eventSlug, $this->getCode());
     }
 }
