@@ -463,18 +463,20 @@ class Client
     /**
      * Update webhook.
      *
-     * @param object $webhook
-     *                        The webhook
-     * @param array  $data
-     *                        The data
+     * @param int|Webhook $webhook
+     *                             The webhook
+     * @param array       $data
+     *                             The data
      *
      * @return \ItkDev\Pretix\Api\Response
      */
     public function updateWebhook($webhook, array $data): Webhook
     {
+        $id = $this->getId($webhook);
+
         return $this->patchEntity(
             Webhook::class,
-            'organizers/'.$this->organizer.'/webhooks/'.$webhook->id.'/',
+            'organizers/'.$this->organizer.'/webhooks/'.$id.'/',
             [
                 'json' => $data,
             ]
