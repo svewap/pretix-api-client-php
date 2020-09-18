@@ -486,11 +486,11 @@ class Client
     /**
      * @param string|\ItkDev\Pretix\Api\Entity\Event $event
      */
-    public function getOrders($event, array $query = []): EntityCollection
+    public function getOrders($event, array $query = [], array $options = []): EntityCollection
     {
         $eventSlug = $this->getSlug($event);
 
-        $orders = $this->getCollection(Order::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/orders/');
+        $orders = $this->getCollection(Order::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/orders/', $options);
 
         $subEventId = isset($query['subevent']) ? $this->getId($query['subevent']) : null;
         /** @var Order $order */
@@ -670,7 +670,10 @@ class Client
             'headers' => $headers,
         ];
 
-        $uri = 'api/v1/'.$path;
+        // If we get an absolute url we use that. Otherwise we compute an api path.
+        $uri = filter_var($path, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED)
+            ? $path
+            : 'api/v1/'.$path;
 
         try {
             return $this->client->request($method, $uri, $options);
@@ -702,21 +705,37 @@ class Client
         if (!is_subclass_of($class, AbstractEntity::class)) {
             throw new \RuntimeException(sprintf('Class %s must be an %s', $class, AbstractEntity::class));
         }
-        $response = $this->request($method, $path, $options);
+        $items = [];
 
-        return $this->loadCollection($class, $response);
+        $response = $this->request($method, $path, $options);
+        try {
+            $data = json_decode((string) $response->getBody(), true);
+            if (isset($data['results'])) {
+                $items = array_merge($items, $data['results']);
+            }
+            $fetchAll = $options['fetch_all'] ?? false;
+            unset($options['fetch_all']);
+            while ($fetchAll && $data['next']) {
+                $response = $this->request($method, $data['next'], $options);
+                $data = json_decode((string) $response->getBody(), true);
+                if (isset($data['results'])) {
+                    $items = array_merge($items, $data['results']);
+                }
+            }
+        } catch (\Exception $exception) {
+            // @TODO What to do?
+        }
+
+        return $this->loadCollection($class, $items);
     }
 
     private function loadCollection(
         string $class,
-        HttpResponse $response
+        array $items
     ): EntityCollectionInterface {
-        $data = json_decode((string) $response->getBody(), true);
-
-        return new EntityCollection(array_map(function ($data) use ($class
-        ) {
-            return $this->createEntity($class, $data);
-        }, $data['results']));
+        return new EntityCollection(array_map(function ($item) use ($class) {
+            return $this->createEntity($class, $item);
+        }, $items));
     }
 
     /**
