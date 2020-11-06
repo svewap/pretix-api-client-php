@@ -16,6 +16,7 @@ use ItkDev\Pretix\Api\Collections\EntityCollection;
 use ItkDev\Pretix\Api\Collections\EntityCollectionInterface;
 use ItkDev\Pretix\Api\Entity\AbstractEntity;
 use ItkDev\Pretix\Api\Entity\Event;
+use ItkDev\Pretix\Api\Entity\Exporter;
 use ItkDev\Pretix\Api\Entity\Item;
 use ItkDev\Pretix\Api\Entity\Order;
 use ItkDev\Pretix\Api\Entity\Organizer;
@@ -557,6 +558,28 @@ class Client
         $eventSlug = $this->getSlug($event);
 
         return $this->get('organizers/'.$organizerSlug.'/events/'.$eventSlug.'/questions/');
+    }
+
+    public function getEventExporters($event)
+    {
+        $eventSlug = $this->getSlug($event);
+
+        return $this->getCollection(Exporter::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/exporters/');
+    }
+
+    public function runExporter($event, $identifier, $parameters)
+    {
+        $eventSlug = $this->getSlug($event);
+
+        return $this->post('organizers/'.$this->organizer.'/events/'.$eventSlug.'/exporters/'.$identifier.'/run/', ['json' => $parameters]);
+    }
+
+    public function getExport(array $run)
+    {
+        $url = $run['download'];
+
+        // @TODO Handle 409 responses.
+        return $this->get($url);
     }
 
     private function getEntity($class, $path, array $options = [])
