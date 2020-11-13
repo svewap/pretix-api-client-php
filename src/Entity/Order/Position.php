@@ -21,9 +21,9 @@ use ItkDev\Pretix\Api\Exception\InvalidArgumentException;
  *
  * @method int          getItem()
  * @method int|SubEvent getSubevent()
- * @method string|null getAttendeeName()
- * @method string|null getAttendeeEmail()
- * @method float getPrice()
+ * @method string|null  getAttendeeName()
+ * @method string|null  getAttendeeEmail()
+ * @method float        getPrice()
  */
 class Position extends AbstractEntity
 {
