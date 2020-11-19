@@ -12,6 +12,8 @@ namespace ItkDev\Pretix\Api\Entity;
 
 /**
  * @see https://docs.pretix.eu/en/latest/api/resources/questions.html
+ *
+ * @method int getId()
  */
 class Question extends AbstractEntity
 {
@@ -59,4 +61,9 @@ class Question extends AbstractEntity
         // An old version of dependency_values that only allows for one value. Deprecated.
         'dependency_value' => 'string',
     ];
+
+    public function getQuestion()
+    {
+        return $this->getValue('question', []);
+    }
 }

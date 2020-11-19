@@ -18,7 +18,7 @@ use ItkDev\Pretix\Api\Entity\Order\Position;
  *
  * @method string                                                     getCode()
  * @method \ItkDev\Pretix\Api\Collections\EntityCollection|Position[] getPositions()
- * @method string|null getEmail()
+ * @method string|null                                                getEmail()
  */
 class Order extends AbstractEntity
 {

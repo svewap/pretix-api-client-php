@@ -12,13 +12,17 @@ namespace ItkDev\Pretix\Api;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\Response as HttpResponse;
+use GuzzleHttp\RequestOptions;
 use ItkDev\Pretix\Api\Collections\EntityCollection;
 use ItkDev\Pretix\Api\Collections\EntityCollectionInterface;
 use ItkDev\Pretix\Api\Entity\AbstractEntity;
+use ItkDev\Pretix\Api\Entity\CheckInList;
 use ItkDev\Pretix\Api\Entity\Event;
+use ItkDev\Pretix\Api\Entity\Exporter;
 use ItkDev\Pretix\Api\Entity\Item;
 use ItkDev\Pretix\Api\Entity\Order;
 use ItkDev\Pretix\Api\Entity\Organizer;
+use ItkDev\Pretix\Api\Entity\Question;
 use ItkDev\Pretix\Api\Entity\Quota;
 use ItkDev\Pretix\Api\Entity\QuotaAvailability;
 use ItkDev\Pretix\Api\Entity\SubEvent;
@@ -542,6 +546,43 @@ class Client
     }
 
     /**
+     * Get check-in lists.
+     *
+     * @param object|string $event
+     *                             The event
+     *
+     * @return Doctrine\Common\Collections|Question[]
+     */
+    public function getCheckInLists($event)
+    {
+        $eventSlug = $this->getSlug($event);
+
+        return $this->getCollection(CheckInList::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/checkinlists/');
+    }
+
+    /**
+     * Create check-in list.
+     *
+     * @param array $data The data
+     *
+     * @return CheckInList
+     */
+    public function createCheckInList($event, array $data)
+    {
+        $eventSlug = $this->getSlug($event);
+
+        $data += [
+            'all_products' => true,
+            'limit_products' => [],
+        ];
+
+        return $this->postEntity(CheckInList::class,
+            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/checkinlists/', [
+                'json' => $data,
+            ]);
+    }
+
+    /**
      * Get questions.
      *
      * @param object|string $organizer
@@ -549,14 +590,35 @@ class Client
      * @param object|string $event
      *                                 The event
      *
-     * @return \ItkDev\Pretix\Api\Response
+     * @return Doctrine\Common\Collections|Question[]
      */
-    public function getQuestions($organizer, $event): Response
+    public function getQuestions($event)
     {
-        $organizerSlug = $this->getSlug($organizer);
         $eventSlug = $this->getSlug($event);
 
-        return $this->get('organizers/'.$organizerSlug.'/events/'.$eventSlug.'/questions/');
+        return $this->getCollection(Question::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/questions/');
+    }
+
+    public function getEventExporters($event)
+    {
+        $eventSlug = $this->getSlug($event);
+
+        return $this->getCollection(Exporter::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/exporters/');
+    }
+
+    public function runExporter($event, $identifier, $parameters)
+    {
+        $eventSlug = $this->getSlug($event);
+
+        return $this->post('organizers/'.$this->organizer.'/events/'.$eventSlug.'/exporters/'.$identifier.'/run/', ['json' => $parameters]);
+    }
+
+    public function getExport(array $run)
+    {
+        $url = $run['download'];
+
+        // We want to handle http errors ourselves (cf. https://docs.pretix.eu/en/latest/api/resources/exporters.html#downloading-the-result)
+        return $this->get($url, [RequestOptions::HTTP_ERRORS => false]);
     }
 
     private function getEntity($class, $path, array $options = [])
