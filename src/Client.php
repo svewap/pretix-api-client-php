@@ -733,7 +733,7 @@ class Client
         ];
 
         // If we get an absolute url we use that. Otherwise we compute an api path.
-        $uri = filter_var($path, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED)
+        $uri = filter_var($path, FILTER_VALIDATE_URL)
             ? $path
             : 'api/v1/'.$path;
 
