@@ -18,6 +18,7 @@ use ItkDev\Pretix\Api\Collections\EntityCollectionInterface;
 use ItkDev\Pretix\Api\Entity\AbstractEntity;
 use ItkDev\Pretix\Api\Entity\CheckInList;
 use ItkDev\Pretix\Api\Entity\Event;
+use ItkDev\Pretix\Api\Entity\Event\Settings as EventSettings;
 use ItkDev\Pretix\Api\Entity\Exporter;
 use ItkDev\Pretix\Api\Entity\Item;
 use ItkDev\Pretix\Api\Entity\Order;
@@ -231,6 +232,69 @@ class Client
         $eventSlug = $this->getSlug($event);
 
         return $this->delete('organizers/'.$this->organizer.'/events/'.$eventSlug.'/');
+    }
+
+    /**
+     * Get event settings.
+     *
+     * @see https://docs.pretix.eu/en/latest/api/resources/events.html#get--api-v1-organizers-(organizer)-events-(event)-settings-
+     *
+     * @param object|string $event
+     *                             The event or event slug
+     *
+     * @return eventSettings
+     *                       The event settings
+     */
+    public function getEventSettings($event)
+    {
+        $eventSlug = $this->getSlug($event);
+
+        return $this->getEntity(EventSettings::class,
+            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/settings/');
+    }
+
+    /**
+     * Set event settings.
+     *
+     * @see https://docs.pretix.eu/en/latest/api/resources/events.html#patch--api-v1-organizers-(organizer)-events-(event)-settings-
+     *
+     * @param object|string $event
+     *                                The event or event slug
+     * @param array         $settings
+     *                                The settings
+     *
+     * @return eventSettings
+     *                       The event settings
+     */
+    public function setEventSettings($event, array $settings)
+    {
+        $eventSlug = $this->getSlug($event);
+
+        return $this->patchEntity(
+            EventSettings::class,
+            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/settings/',
+            ['json' => $settings]
+        );
+    }
+
+    /**
+     * Set event setting.
+     *
+     * @see https://docs.pretix.eu/en/latest/api/resources/events.html#patch--api-v1-organizers-(organizer)-events-(event)-settings-
+     *
+     * @param object|string $event
+     *                             The event or event slug
+     * @param string        $name
+     *                             The setting name
+     * @param mixed         $value
+     *                             The setting value
+     *
+     * @return eventSettings
+     *                       The event settings
+     */
+    public function setEventSetting($event, string $name, $value)
+    {
+        return $this->setEventSettings($event, [$name => $value]);
     }
 
     /**
@@ -785,6 +849,7 @@ class Client
                 }
             }
         } catch (\Exception $exception) {
+            throw $exception;
             // @TODO What to do?
         }
 
