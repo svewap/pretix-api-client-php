@@ -1,4 +1,5 @@
 # Pretix api client change Log
+
 All notable changes to this project should be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
@@ -18,7 +19,7 @@ before starting to add changes.
 
 ## Example of change log record
 
-```
+```md
 ## [x.x.x] Release name
 ### Added
 - Description on added functionality.
