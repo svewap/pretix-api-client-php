@@ -46,6 +46,10 @@
         "coding-standards-apply": [
             "@coding-standards-apply/php-cs-fixer"
         ],
+        "code-analysis": [
+          "@code-analysis/phan",
+          "@code-analysis/phpstan"
+        ],
         "test": [
             "phpunit"
         ]
