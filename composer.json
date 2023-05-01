@@ -35,7 +35,7 @@
     },
     "scripts": {
         "coding-standards-check/php-cs-fixer": [
-            "php-cs-fixer --config=.php-cs-fixer.dist.php fix --dry-run"
+            "php-cs-fixer --config=.php-cs-fixer.dist.php fix"
         ],
         "coding-standards-check": [
             "@coding-standards-check/php-cs-fixer"
