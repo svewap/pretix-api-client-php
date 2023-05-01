@@ -1,10 +1,8 @@
 <?php
 
-/*
- * This file is part of itk-dev/pretix-api-client-php.
- *
+/**
+ * This file is part of itk-dev/serviceplatformen.
  * (c) 2020 ITK Development
- *
  * This source file is subject to the MIT license.
  */
 
@@ -90,8 +88,10 @@ class AbstractEntity
 
         switch ($type) {
             case 'multi-lingual string':
-                $value = $this->getLocalizedString($value,
-                    $arguments[0] ?? null);
+                $value = $this->getLocalizedString(
+                    $value,
+                    $arguments[0] ?? null
+                );
                 break;
         }
 

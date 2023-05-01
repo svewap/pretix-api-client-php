@@ -1,10 +1,8 @@
 <?php
 
-/*
- * This file is part of itk-dev/pretix-api-client-php.
- *
+/**
+ * This file is part of itk-dev/serviceplatformen.
  * (c) 2020 ITK Development
- *
  * This source file is subject to the MIT license.
  */
 
