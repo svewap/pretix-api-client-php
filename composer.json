@@ -3,7 +3,7 @@
     "description": "PHP client for pretix api",
     "type": "library",
     "require": {
-        "php": "^7.2",
+        "php": "^7.2||^8.1",
         "ext-json": "*",
         "doctrine/collections": "^1.4",
         "guzzlehttp/guzzle": "^6.3",
