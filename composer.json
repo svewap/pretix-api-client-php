@@ -10,7 +10,7 @@
         "symfony/options-resolver": "^5.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.16",
+        "friendsofphp/php-cs-fixer": "^3.16",
         "phpunit/phpunit": "^8.5"
     },
     "license": "MIT",
