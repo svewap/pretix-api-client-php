@@ -8,13 +8,16 @@ See ["how do I make a good changelog record?"](https://keepachangelog.com/en/1.0
 before starting to add changes.
 
 ## [Unreleased]
+
 - Basic github actions added
 - Update php requirements
 
 ## 1.0.0
+
 - Initial release
 
 ## Example of change log record
+
 ```
 ## [x.x.x] Release name
 ### Added
