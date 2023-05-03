@@ -507,7 +507,7 @@ class Client
      *
      * @return \ItkDev\Pretix\Api\Response
      */
-    public function getWebhook($id): Response
+    public function getWebhook($id): HttpResponse
     {
         return $this->get('organizers/'.$this->organizer.'/webhooks/'.$id);
     }
