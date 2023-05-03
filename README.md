@@ -4,7 +4,6 @@
 composer require itk-dev/pretix-api-client-php
 ```
 
-
 ## Test
 
 ```sh
@@ -28,13 +27,13 @@ Run the tests:
 
 To access pretix, add
 
-```
+```sh
 0.0.0.0 pretix
 ```
 
 to your `/etc/hosts` file and run
 
-```
+```sh
 open http://pretix:$(docker-compose port pretix 80 | cut -d: -f2)/control
 ```
 
