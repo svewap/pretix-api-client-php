@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of itk-dev/pretix-api-client-php.
- *
- * (c) 2020 ITK Development
- *
- * This source file is subject to the MIT license.
- */
-
 namespace ItkDev\Pretix\Api\Entity;
 
 use ItkDev\Pretix\Api\Collections\EntityCollection;
@@ -90,8 +82,10 @@ class AbstractEntity
 
         switch ($type) {
             case 'multi-lingual string':
-                $value = $this->getLocalizedString($value,
-                    $arguments[0] ?? null);
+                $value = $this->getLocalizedString(
+                    $value,
+                    $arguments[0] ?? null
+                );
                 break;
         }
 

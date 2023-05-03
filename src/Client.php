@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of itk-dev/pretix-api-client-php.
- *
- * (c) 2020 ITK Development
- *
- * This source file is subject to the MIT license.
- */
-
 namespace ItkDev\Pretix\Api;
 
 use GuzzleHttp\Client as HttpClient;
@@ -129,8 +121,10 @@ class Client
      */
     public function getOrganizer($organizer): Organizer
     {
-        return $this->getEntity(Organizer::class,
-            'organizers/'.$organizer.'/');
+        return $this->getEntity(
+            Organizer::class,
+            'organizers/'.$organizer.'/'
+        );
     }
 
     /**
@@ -159,8 +153,10 @@ class Client
     {
         $eventSlug = $this->getSlug($event);
 
-        return $this->getEntity(Event::class,
-            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/');
+        return $this->getEntity(
+            Event::class,
+            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/'
+        );
     }
 
     /**
@@ -170,10 +166,13 @@ class Client
      */
     public function createEvent(array $data): Event
     {
-        return $this->postEntity(Event::class,
-            'organizers/'.$this->organizer.'/events/', [
+        return $this->postEntity(
+            Event::class,
+            'organizers/'.$this->organizer.'/events/',
+            [
                 'json' => $data,
-            ]);
+            ]
+        );
     }
 
     /**
@@ -249,8 +248,10 @@ class Client
     {
         $eventSlug = $this->getSlug($event);
 
-        return $this->getEntity(EventSettings::class,
-            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/settings/');
+        return $this->getEntity(
+            EventSettings::class,
+            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/settings/'
+        );
     }
 
     /**
@@ -309,8 +310,10 @@ class Client
     {
         $eventSlug = $this->getSlug($event);
 
-        return $this->getCollection(Item::class,
-            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/items/');
+        return $this->getCollection(
+            Item::class,
+            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/items/'
+        );
     }
 
     /**
@@ -502,11 +505,14 @@ class Client
      * @param string $id
      *                   The id
      *
-     * @return \ItkDev\Pretix\Api\Response
+     * @return \ItkDev\Pretix\Api\Entity\Webhook
      */
-    public function getWebhook($id): Response
+    public function getWebhook($id): Webhook
     {
-        return $this->get('organizers/'.$this->organizer.'/webhooks/'.$id);
+        return $this->getEntity(
+            Webhook::class,
+            'organizers/' . $this->organizer . '/webhooks/' . $id
+        );
     }
 
     /**
@@ -640,10 +646,13 @@ class Client
             'limit_products' => [],
         ];
 
-        return $this->postEntity(CheckInList::class,
-            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/checkinlists/', [
+        return $this->postEntity(
+            CheckInList::class,
+            'organizers/'.$this->organizer.'/events/'.$eventSlug.'/checkinlists/',
+            [
                 'json' => $data,
-            ]);
+            ]
+        );
     }
 
     /**
