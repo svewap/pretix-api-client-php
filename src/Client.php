@@ -507,10 +507,11 @@ class Client
      *
      * @return \ItkDev\Pretix\Api\Entity\Webhook
      */
-    public function getWebhook($id): Webhook {
+    public function getWebhook($id): Webhook
+    {
         return $this->getEntity(
-          Webhook::class,
-          'organizers/' . $this->organizer . '/webhooks/' . $id
+            Webhook::class,
+            'organizers/' . $this->organizer . '/webhooks/' . $id
         );
     }
 
