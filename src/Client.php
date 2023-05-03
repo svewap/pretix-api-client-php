@@ -505,11 +505,13 @@ class Client
      * @param string $id
      *                   The id
      *
-     * @return \ItkDev\Pretix\Api\Response
+     * @return \ItkDev\Pretix\Api\Entity\Webhook
      */
-    public function getWebhook($id): HttpResponse
-    {
-        return $this->get('organizers/'.$this->organizer.'/webhooks/'.$id);
+    public function getWebhook($id): Webhook {
+        return $this->getEntity(
+          Webhook::class,
+          'organizers/' . $this->organizer . '/webhooks/' . $id
+        );
     }
 
     /**

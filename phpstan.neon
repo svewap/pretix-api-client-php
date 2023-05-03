@@ -4,6 +4,4 @@ parameters:
     - tests
   level: 0
   customRulesetUsed: true
-  ignoreErrors:
-      - '#\Drupal calls should be avoided in classes, use dependency injection instead#'
   reportUnmatchedIgnoredErrors: false
