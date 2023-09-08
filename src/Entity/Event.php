@@ -54,6 +54,7 @@ class Event extends AbstractEntity
         'seat_category_mapping' => 'object',
         // Event timezone name
         'timezone' => 'string',
+        'public_url' => 'string',
     ];
 
     public function getUrl()
@@ -64,5 +65,10 @@ class Event extends AbstractEntity
     public function getShopUrl()
     {
         return sprintf('%s/%s/%s/', $this->getPretixUrl(), $this->getOrganizerSlug(), $this->getSlug());
+    }
+
+    public function getPublicUrl()
+    {
+        return $this->getValue('public_url',[]);
     }
 }
