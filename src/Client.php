@@ -413,11 +413,11 @@ class Client
      *
      * @return EntityCollectionInterface<\ItkDev\Pretix\Api\Entity\SubEvent>
      */
-    public function getSubEvents($event)
+    public function getSubEvents($event, array $query = [])
     {
         $eventSlug = $this->getSlug($event);
 
-        return $this->getCollection(SubEvent::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/subevents/',['fetch_all' => true]);
+        return $this->getCollection(SubEvent::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/subevents/', array_merge(['query' => $query], ['fetch_all' => 'true']));
     }
 
     /**
@@ -841,7 +841,6 @@ class Client
             throw new \RuntimeException(sprintf('Class %s must be an %s', $class, AbstractEntity::class));
         }
         $items = [];
-
         $response = $this->request($method, $path, $options);
         try {
             $data = json_decode((string) $response->getBody(), true);
@@ -850,6 +849,7 @@ class Client
             }
             $fetchAll = $options['fetch_all'] ?? false;
             unset($options['fetch_all']);
+            unset($options['query']);
             while ($fetchAll && $data['next']) {
                 $response = $this->request($method, $data['next'], $options);
                 $data = json_decode((string) $response->getBody(), true);
