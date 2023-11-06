@@ -62,6 +62,7 @@ class SubEvent extends AbstractEntity
         'seating_plan' => 'integer',
         // An object mapping categories of the seating plan (strings) to items in the event (integers or null).
         'seat_category_mapping' => 'object',
+        'best_availability_state' => 'integer',
     ];
 
     /**
