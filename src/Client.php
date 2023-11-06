@@ -417,7 +417,7 @@ class Client
     {
         $eventSlug = $this->getSlug($event);
 
-        return $this->getCollection(SubEvent::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/subevents/');
+        return $this->getCollection(SubEvent::class, 'organizers/'.$this->organizer.'/events/'.$eventSlug.'/subevents/',['fetch_all' => true]);
     }
 
     /**
